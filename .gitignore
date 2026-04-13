@@ -1,0 +1,14 @@
+## Xcode user-specific
+xcuserdata/
+*.xcuserstate
+
+## Build output
+build/
+DerivedData/
+
+## Debug symbols
+*.dSYM
+*.dSYM.zip
+
+## macOS
+.DS_Store

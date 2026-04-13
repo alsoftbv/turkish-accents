@@ -1,30 +1,27 @@
-//
-//  AppDelegate.swift
-//  turkish-accents
-//
-//  Created by Altuğ Bakan on 13/04/2026.
-//
-
 import Cocoa
+import InputMethodKit
 
-@main
-class AppDelegate: NSObject, NSApplicationDelegate {
+// NSApplication subclass that wires its delegate manually so the Info.plist
+// NSPrincipalClass path can instantiate the app without a Main.storyboard.
+final class NSManualApplication: NSApplication {
+    private let appDelegate = AppDelegate()
 
-    @IBOutlet var window: NSWindow!
-
-
-    func applicationDidFinishLaunching(_ aNotification: Notification) {
-        // Insert code here to initialize your application
+    override init() {
+        super.init()
+        self.delegate = appDelegate
     }
 
-    func applicationWillTerminate(_ aNotification: Notification) {
-        // Insert code here to tear down your application
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
-
-    func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
-        return true
-    }
-
-
 }
 
+@main
+final class AppDelegate: NSObject, NSApplicationDelegate {
+    var server: IMKServer?
+
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        let connectionName = Bundle.main.infoDictionary?["InputMethodConnectionName"] as? String
+        server = IMKServer(name: connectionName, bundleIdentifier: Bundle.main.bundleIdentifier)
+    }
+}
